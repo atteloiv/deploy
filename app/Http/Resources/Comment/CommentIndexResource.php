@@ -23,7 +23,6 @@ class CommentIndexResource extends JsonResource
             'message' => $this->message,
             'created_at' => $this->created_at,
             'user' => new UserResource($this->user),
-            //'user1' => UserResource::collection($this->users),
         ];
     }
 }

@@ -20,9 +20,6 @@ class CommentStoreResource extends JsonResource
             'post_id' => $this->post_id,
             'message' => $this->message,
             'created_at' => $this->created_at,
-            //'user' => new UserResource($this->user),
-            //'user' => new UserResource($this->user),
-            //'user' => UserResource::collection($this->users),
         ];
     }
 }

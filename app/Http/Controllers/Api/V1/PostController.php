@@ -23,21 +23,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        return PostIndexResource::collection(Post::with('tags')->latest()->take(9)->inRandomOrder()->get()/*->random(9)*/);
-
-        // $data = $request->validated();
-
-        // $filter = app()->make(PostFilter::class, ['queryParams' => array_filter($data)]);
-        // $posts = Post::filter($filter)->get();
-        // //return PostIndexResource::collection($posts);
-        // dd($posts);
-        //return 111;
-
-        //return Category::find(1)->posts;
-        //return Post::find(2)->categories;
-        //$lastsPosts = Post::with('comments')->latest()->take(9);
-        //$randomPosts = $lastsPosts->reorder()->inRandomOrder()->get();
-        //return PostIndexResource::collection($randomPosts);
+        return PostIndexResource::collection(Post::with('tags')->latest()->take(9)->inRandomOrder()->get());
 
     }
 
@@ -49,27 +35,7 @@ class PostController extends Controller
      */
     public function store(PostRequest $request)
     {
-        // $data = request()/*->PostRequest;*/->validate([
-        //     'title' => 'required|max:255',
-        //     'description' => 'required|max:255',
-        //     'content' => 'required|min:5',
-        //     'category_id' => '',
-        //     //'tags' => '',
-        // ]);
-        // $tags = $data['tags'];
-        // unset($data['tags']);
-        // Post::create($data);
-
         $created_post = Post::create($request->validated());
-
-        // foreach ($tags as $tag) {
-        //     PostTag::firstOrCreate([
-        //         'tag_id' => $tag,
-        //         'post_id' => $post->id,
-        //     ]);
-        // }
-
-        // return new Post($data->toArray());
         return new Post($created_post->toArray());
     }
 
