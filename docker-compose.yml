@@ -1,0 +1,57 @@
+version: '3'
+
+services:
+  back:
+    build:
+      context: ./
+      dockerfile: .docker/Dockerfile.local
+    ports:
+      - "${BACK_PORT}:${BACK_PORT}"
+    environment:
+      - SERVER_PORT=${BACK_PORT}
+      - APP_NAME=${BACK_APP_NAME}
+      - APP_KEY=${BACK_APP_KEY}
+      - APP_ENV=${BACK_APP_ENV}
+      - APP_DEBUG=${BACK_APP_DEBUG}
+      - DB_CONNECTION=${DB_CONNECTION}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_DATABASE=${DB_DATABASE}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - INTERACTIVE_MODE=false
+      - JWT_SECRET=${JWT_SECRET}
+    volumes:
+      - ./:/app
+      - /app/vendor
+    depends_on:
+      db:
+        condition: service_healthy
+    command: "php artisan serve --host=0.0.0.0"
+
+  db:
+    image: mysql:5.7
+    platform: linux/x86_64
+    environment:
+      - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_USER=${DB_USERNAME}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+    ports:
+      - "${DB_PORT}:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "--silent"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    ports:
+      - 8081:80
+
+volumes:
+  db-data:
